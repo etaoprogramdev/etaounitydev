@@ -9,6 +9,7 @@ public class BabyController : MonoBehaviour
 {
     #region Variables
     static public bool Launch;
+    public AudioSource bodyHit;
     static public float multiplier = 0;
     public GameObject babyInfo;
     public ParticleSystem hitEffect;
@@ -78,16 +79,14 @@ public class BabyController : MonoBehaviour
                 }
             }
         }
-    }
-    private void FixedUpdate()
-    {
         //Check for death
-        if (toughness < 0)
+        if (toughness <= 0)
         {
             rb.mass = 100;
             gameEnd = true;
             Time.timeScale = 0f;
-        } else if (toughness > 0)
+        }
+        else if (toughness > 0)
         {
             rb.mass = 1;
             gameEnd = false;
@@ -104,11 +103,13 @@ public class BabyController : MonoBehaviour
         if (hitInfo.gameObject.tag == ("Ground"))
         {
             toughness -= 1;
+            Debug.Log(toughness);
             hasBoosted = false;
             babySpringAnimation.SetBool("isPressed", true);
             StartCoroutine("Timer");
             cameraController.shakeCamera = true;
             CreateExplosion();
+            bodyHit.Play();
         }
 
     }

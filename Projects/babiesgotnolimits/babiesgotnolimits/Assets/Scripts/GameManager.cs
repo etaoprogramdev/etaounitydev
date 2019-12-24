@@ -15,8 +15,13 @@ public class GameManager : MonoBehaviour
     #region Variable Bank and Functions
     #region Variables
     //Others
+    static public bool isPaused = false;
     public GameObject gameOverMenu;
     public TextMeshProUGUI Score;
+    public AudioSource menuClick;
+    public AudioSource buyOpal;
+    public AudioSource coinSound;
+    public AudioSource upgradeSound;
     public TextMeshProUGUI Money;
     public TextMeshProUGUI Currency;
     public Animator babyShowcase;
@@ -39,6 +44,7 @@ public class GameManager : MonoBehaviour
     public Image UpgradeButton;
     public Image LooksButton;
     public SurfaceEffector2D[] floorMaterial;
+
     #endregion
     //Cost
     public int thrustCost = 20;
@@ -58,6 +64,10 @@ public class GameManager : MonoBehaviour
     static public float _money = 0f;
     static public int _spriteIndex = 0;
     static public int _currency;
+    #region Tag GameObjects
+    [Header("Sprite Tags")]
+    public GameObject HulkTag;
+    #endregion
     #endregion
     #region Standard Methods
     public void Start()
@@ -77,6 +87,14 @@ public class GameManager : MonoBehaviour
     }
     public void Update()
     {
+        //Hide Price tags
+        if(HulkPrice == 0)
+        {
+            HulkTag.SetActive(false);
+        } else if(HulkPrice > 0)
+        {
+            HulkTag.SetActive(true);
+        }
         //Declare Sprite Index
         babyShowcase.SetInteger("SpriteIndex", _spriteIndex);
         Money.text = _money.ToString();
@@ -166,6 +184,14 @@ public class GameManager : MonoBehaviour
     }
     #endregion
     #region In Game Purchases 
+    public void BuyOpalSound()
+    {
+        buyOpal.Play();
+    }
+    public void CoinGet()
+    {
+        coinSound.Play();
+    }
     public void AddMoney2000()
     {
         if (_currency >= 10)
@@ -208,6 +234,14 @@ public class GameManager : MonoBehaviour
     }
     #endregion
     #region Button functions
+    public void PlayClick()
+    {
+        menuClick.Play();
+    }
+    public void PlayUpgrade()
+    {
+        upgradeSound.Play();
+    }
     public void Restart()
     {
         SceneManager.LoadScene(sceneBuildIndex: 1);
@@ -293,11 +327,13 @@ public class GameManager : MonoBehaviour
     {
         Time.timeScale = 0f;
         pauseMenu.SetActive(true);
+        isPaused = true;
     }
     public void ClosePause()
     {
         Time.timeScale = 1f;
         pauseMenu.SetActive(false);
+        isPaused = false;
     }
     public void OpenLooksMenu()
     {
