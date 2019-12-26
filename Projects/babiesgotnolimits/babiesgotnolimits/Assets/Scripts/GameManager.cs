@@ -6,9 +6,15 @@ using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.SceneManagement;
 using TMPro;
+using UnityEngine.Advertisements;
+using UnityEngine.Analytics;
+using UnityEngine.Purchasing;
 
 public class GameManager : MonoBehaviour
 {
+    public Purchaser purchaseManager;
+    //Ads
+    private string storeID = "3408991";
     #region Skin System
     static public int HulkPrice = 5;
     #endregion
@@ -19,7 +25,6 @@ public class GameManager : MonoBehaviour
     public GameObject gameOverMenu;
     public TextMeshProUGUI Score;
     public AudioSource menuClick;
-    public AudioSource buyOpal;
     public AudioSource coinSound;
     public AudioSource upgradeSound;
     public TextMeshProUGUI Money;
@@ -40,11 +45,14 @@ public class GameManager : MonoBehaviour
     public GameObject pauseMenu;
     public GameObject GUI;
     public GameObject LooksMenu;
+    public GameObject GuideMenu;
     public GameObject UpgradeMenu;
     public Image UpgradeButton;
     public Image LooksButton;
+    public Image GuideButton;
+    public TextMeshProUGUI highScoreTxt;
     public SurfaceEffector2D[] floorMaterial;
-
+    public GameObject infoMenu;
     #endregion
     //Cost
     public int thrustCost = 20;
@@ -64,6 +72,7 @@ public class GameManager : MonoBehaviour
     static public float _money = 0f;
     static public int _spriteIndex = 0;
     static public int _currency;
+    static public int _highScore;
     #region Tag GameObjects
     [Header("Sprite Tags")]
     public GameObject HulkTag;
@@ -79,14 +88,24 @@ public class GameManager : MonoBehaviour
             floorMaterial[i].speed = 10;
         }
         LoadBySerialisation();
+        Advertisement.Initialize(storeID, false);
     }
-
     public void OnDestroy()
+    {
+            SaveBySerialisation();
+    }
+    public void OnApplicationQuit()
     {
         SaveBySerialisation();
     }
     public void Update()
     {
+        //High Score logic
+        if (BabyController.scoreValue > _highScore)
+        {
+            _highScore = Mathf.RoundToInt(BabyController.scoreValue);
+            PlayGamesScript.AddScoreToLeaderBoard(GPGSIds.leaderboard_high_score, _highScore);
+        }
         //Hide Price tags
         if(HulkPrice == 0)
         {
@@ -101,6 +120,7 @@ public class GameManager : MonoBehaviour
         MoneyShop.text = _money.ToString();
         MoneyLooks.text = _money.ToString();
         Currency.text = _currency.ToString();
+
         if (BabyController.gameEnd)
         {
             gameOverMenu.SetActive(true);
@@ -127,6 +147,23 @@ public class GameManager : MonoBehaviour
         Booststat.text = "BOOST :   " + Mathf.Round(_boost / boostSlider.maxValue * 100) + "%";
         Toughstat.text = "TOUGH :   " + Mathf.Round(_toughness / toughSlider.maxValue * 100) + "%";
         Bouncestat.text = "BOUNCE :   " + Mathf.Round(_bounce / bounceSlider.maxValue * 100) + "%";
+        highScoreTxt.text = "HIGH SCORE:   " + _highScore.ToString();
+    }
+    private void HandleShowResult(ShowResult result)
+    {
+        switch (result)
+        {
+            case ShowResult.Finished:
+                Debug.Log("The ad was successfully shown.");
+                _currency += 3;
+                break;
+            case ShowResult.Skipped:
+                Debug.Log("The ad was skipped before reaching the end.");
+                break;
+            case ShowResult.Failed:
+                Debug.LogError("The ad failed to be shown.");
+                break;
+        }
     }
     #endregion
     #region Save System
@@ -134,16 +171,16 @@ public class GameManager : MonoBehaviour
     {
         SaveState save = CreateSaveGameObject();
         BinaryFormatter formatter = new BinaryFormatter();
-        FileStream fileStream = File.Create(Application.dataPath + "/gameData.ss");
+        FileStream fileStream = File.Create(Application.persistentDataPath + "/gameData.ss");
         formatter.Serialize(fileStream, save);
         fileStream.Close();
     }
     public void LoadBySerialisation()
     {
-        if(File.Exists(Application.dataPath + "/gameData.ss"))
+        if(File.Exists(Application.persistentDataPath + "/gameData.ss"))
         {
             BinaryFormatter formatter = new BinaryFormatter();
-            FileStream fileStream = File.Open(Application.dataPath + "/gameData.ss", FileMode.Open);
+            FileStream fileStream = File.Open(Application.persistentDataPath + "/gameData.ss", FileMode.Open);
 
             SaveState save = formatter.Deserialize(fileStream) as SaveState;
             fileStream.Close();
@@ -159,6 +196,7 @@ public class GameManager : MonoBehaviour
             boostCost = save.boostCost;
             toughCost = save.toughCost;
             bounceCost = save.bounceCost;
+            _highScore = save.highScore;
             //Sprite
             HulkPrice = save.HulkPrice;
         }
@@ -178,26 +216,20 @@ public class GameManager : MonoBehaviour
         save.thrustCost = thrustCost;
         save.boostCost = boostCost;
         save.currency = _currency;
+        save.highScore = _highScore;
         //Sprite
         save.HulkPrice = HulkPrice;
         return save;
     }
     #endregion
     #region In Game Purchases 
-    public void BuyOpalSound()
-    {
-        buyOpal.Play();
-    }
-    public void CoinGet()
-    {
-        coinSound.Play();
-    }
     public void AddMoney2000()
     {
         if (_currency >= 10)
         {
             _money += 2000;
             _currency -= 10;
+            coinSound.Play();
         }
     }
     public void AddMoney10000()
@@ -206,6 +238,7 @@ public class GameManager : MonoBehaviour
         {
             _money += 10000;
             _currency -= 100;
+            coinSound.Play();
         }
     }
     public void AddMoney50000()
@@ -214,23 +247,24 @@ public class GameManager : MonoBehaviour
         {
             _money += 50000;
             _currency -= 500;
+            coinSound.Play();
         }
     }
-    public void Grant50Opal()
+    public void Buy50Opal()
     {
-        _currency += 50;
+        purchaseManager.Buy50Opal();
     }
-    public void Grant100Opal()
+    public void Buy100Opal()
     {
-        _currency += 100;
+        purchaseManager.Buy100Opal();
     }
-    public void Grant500Opal()
+    public void Buy500Opal()
     {
-        _currency += 500;
+        purchaseManager.Buy500Opal();
     }
-    public void Grant1000Opal()
+    public void Buy1000Opal()
     {
-        _currency += 1000;
+        purchaseManager.Buy1000Opal();
     }
     #endregion
     #region Button functions
@@ -261,6 +295,10 @@ public class GameManager : MonoBehaviour
             _money -= toughCost;
             toughCost += 300;
         }
+    }
+    public void OpenLeaderBoard()
+    {
+        PlayGamesScript.ShowLeaderBoard();
     }
     public void AddBoost()
     {
@@ -314,7 +352,7 @@ public class GameManager : MonoBehaviour
         _thrust = 1000f;
         _boost = 10f;
         _toughness = 5;
-        _money = 100000;
+        _money = 0;
         _currency = 0;
         _bounce = 1.0f;
         thrustCost = 20;
@@ -342,12 +380,42 @@ public class GameManager : MonoBehaviour
         LooksButton.color = new Color32(235, 235, 235, 255);
         LooksMenu.SetActive(true);
     }
+    public void OpenInfoMenu()
+    {
+        infoMenu.SetActive(true);
+    }
+    public void CloseInfoMenu()
+    {
+        infoMenu.SetActive(false);
+    }
     public void CloseLooksMenu()
     {
         UpgradeMenu.SetActive(true);
         UpgradeButton.color = new Color32(235, 235, 235, 255);
         LooksButton.color = new Color32(235, 235, 235, 202);
         LooksMenu.SetActive(false);
+    }
+    public void OpenGuideMenu()
+    {
+        GuideButton.color = new Color32(235, 235, 235, 255);
+        GuideMenu.SetActive(true);
+        UpgradeMenu.SetActive(false);
+        UpgradeButton.color = new Color32(235, 235, 235, 202);
+        LooksButton.color = new Color32(235, 235, 235, 202);
+        LooksMenu.SetActive(false);
+    }
+    public void CloseGuideMenu()
+    {
+        GuideButton.color = new Color32(235, 235, 235, 202);
+        GuideMenu.SetActive(false);
+    }
+    public void OpenAd()
+    {
+        if (Advertisement.IsReady("rewardedVideo"))
+        {
+            var options = new ShowOptions { resultCallback = HandleShowResult };
+            Advertisement.Show("rewardedVideo", options);
+        }
     }
     #endregion
     #region Sprite Buy System

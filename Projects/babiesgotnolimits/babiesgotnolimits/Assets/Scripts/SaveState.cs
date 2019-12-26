@@ -18,6 +18,7 @@ public class SaveState
     public int bounceCost;
     public int spriteIndex;
     public int currency;
+    public int highScore;
 
     //Sprite
     public int HulkPrice;

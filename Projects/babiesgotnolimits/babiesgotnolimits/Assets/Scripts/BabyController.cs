@@ -36,6 +36,7 @@ public class BabyController : MonoBehaviour
     {
         gameEnd = false;
         Launch = false;
+        GameManager.isPaused = false;
         babyBody.enabled = false;
         babyBum.enabled = false;
         hasBoosted = false;
