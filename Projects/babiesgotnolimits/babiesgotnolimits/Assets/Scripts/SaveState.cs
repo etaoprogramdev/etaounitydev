@@ -22,4 +22,10 @@ public class SaveState
 
     //Sprite
     public int HulkPrice;
+    public int WizardPrice;
+    public int BusinessPrice;
+    public int CupidPrice;
+    public int DemonPrice;
+    public int SamuraiPrice;
+    public int NinjaPrice;
 }

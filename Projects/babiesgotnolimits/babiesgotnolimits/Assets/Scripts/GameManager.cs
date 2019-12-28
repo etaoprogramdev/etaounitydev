@@ -16,7 +16,13 @@ public class GameManager : MonoBehaviour
     //Ads
     private string storeID = "3408991";
     #region Skin System
-    static public int HulkPrice = 5;
+    static public int HulkPrice = 5000;
+    static public int WizardPrice = 10;
+    static public int BusinessPrice = 20;
+    static public int CupidPrice = 10000;
+    static public int DemonPrice = 60;
+    static public int SamuraiPrice = 100000;
+    static public int NinjaPrice = 100;
     #endregion
     #region Variable Bank and Functions
     #region Variables
@@ -76,6 +82,12 @@ public class GameManager : MonoBehaviour
     #region Tag GameObjects
     [Header("Sprite Tags")]
     public GameObject HulkTag;
+    public GameObject WizardTag;
+    public GameObject BusinessTag;
+    public GameObject CupidTag;
+    public GameObject DemonTag;
+    public GameObject SamuraiTag;
+    public GameObject NinjaTag;
     #endregion
     #endregion
     #region Standard Methods
@@ -94,9 +106,12 @@ public class GameManager : MonoBehaviour
     {
             SaveBySerialisation();
     }
-    public void OnApplicationQuit()
+    public void OnApplicationFocus(bool focusing)
     {
-        SaveBySerialisation();
+        if (!focusing)
+        {
+            SaveBySerialisation();
+        }
     }
     public void Update()
     {
@@ -106,14 +121,70 @@ public class GameManager : MonoBehaviour
             _highScore = Mathf.RoundToInt(BabyController.scoreValue);
             PlayGamesScript.AddScoreToLeaderBoard(GPGSIds.leaderboard_high_score, _highScore);
         }
-        //Hide Price tags
-        if(HulkPrice == 0)
+
+        #region Hide Tags
+        if (HulkPrice == 0)
         {
             HulkTag.SetActive(false);
         } else if(HulkPrice > 0)
         {
             HulkTag.SetActive(true);
         }
+
+        if (WizardPrice == 0)
+        {
+            WizardTag.SetActive(false);
+        }
+        else if (WizardPrice > 0)
+        {
+            WizardTag.SetActive(true);
+        }
+
+        if (BusinessPrice == 0)
+        {
+            BusinessTag.SetActive(false);
+        }
+        else if (BusinessPrice > 0)
+        {
+            BusinessTag.SetActive(true);
+        }
+
+        if (CupidPrice == 0)
+        {
+            CupidTag.SetActive(false);
+        }
+        else if (CupidPrice > 0)
+        {
+            CupidTag.SetActive(true);
+        }
+
+        if (DemonPrice == 0)
+        {
+            DemonTag.SetActive(false);
+        }
+        else if (DemonPrice > 0)
+        {
+            DemonTag.SetActive(true);
+        }
+
+        if (SamuraiPrice == 0)
+        {
+            SamuraiTag.SetActive(false);
+        }
+        else if (SamuraiPrice > 0)
+        {
+            SamuraiTag.SetActive(true);
+        }
+        
+        if (NinjaPrice == 0)
+        {
+            NinjaTag.SetActive(false);
+        }
+        else if (NinjaPrice > 0)
+        {
+            NinjaTag.SetActive(true);
+        }
+        #endregion
         //Declare Sprite Index
         babyShowcase.SetInteger("SpriteIndex", _spriteIndex);
         Money.text = _money.ToString();
@@ -199,6 +270,13 @@ public class GameManager : MonoBehaviour
             _highScore = save.highScore;
             //Sprite
             HulkPrice = save.HulkPrice;
+            WizardPrice = save.WizardPrice;
+            BusinessPrice = save.BusinessPrice;
+            CupidPrice = save.CupidPrice;
+            DemonPrice = save.DemonPrice;
+            SamuraiPrice = save.SamuraiPrice;
+            NinjaPrice = save.NinjaPrice;
+
         }
     }
 
@@ -219,6 +297,12 @@ public class GameManager : MonoBehaviour
         save.highScore = _highScore;
         //Sprite
         save.HulkPrice = HulkPrice;
+        save.WizardPrice = WizardPrice;
+        save.BusinessPrice = BusinessPrice;
+        save.CupidPrice = CupidPrice;
+        save.DemonPrice = DemonPrice;
+        save.SamuraiPrice = SamuraiPrice;
+        save.NinjaPrice = NinjaPrice;
         return save;
     }
     #endregion
@@ -359,8 +443,15 @@ public class GameManager : MonoBehaviour
         boostCost = 100;
         toughCost = 100;
         bounceCost = 150;
-        HulkPrice = 5;
-}
+        //Prices
+        HulkPrice = 5000;
+        WizardPrice = 10;
+        BusinessPrice = 20;
+        CupidPrice = 10000;
+        DemonPrice = 60;
+        SamuraiPrice = 100000;
+        NinjaPrice = 100;
+    }
     public void OpenPause()
     {
         Time.timeScale = 0f;
@@ -432,13 +523,91 @@ public class GameManager : MonoBehaviour
     }
     public void HulkBabyBuy()
     {
-        if (_spriteIndex != 1 && _currency >= HulkPrice)
+        if (_spriteIndex != 1 && _money >= HulkPrice)
         {
             _spriteIndex = 1;
-            _currency -= HulkPrice;
+            _money -= HulkPrice;
             HulkPrice = 0;
         }
         else if (_spriteIndex == 1)
+        {
+            Debug.Log("Look is already in use");
+        }
+    }
+    public void WizardBuy()
+    {
+        if (_spriteIndex != 2 && _currency >= WizardPrice)
+        {
+            _spriteIndex = 2;
+            _currency -= WizardPrice;
+            WizardPrice = 0;
+        }
+        else if (_spriteIndex == 2)
+        {
+            Debug.Log("Look is already in use");
+        }
+    }
+    public void BusinessBuy()
+    {
+        if (_spriteIndex != 3 && _currency >= BusinessPrice)
+        {
+            _spriteIndex = 3;
+            _currency -= BusinessPrice;
+            BusinessPrice = 0;
+        }
+        else if (_spriteIndex == 3)
+        {
+            Debug.Log("Look is already in use");
+        }
+    }
+    public void CupidBuy()
+    {
+        if (_spriteIndex != 4 && _money >= CupidPrice)
+        {
+            _spriteIndex = 4;
+            _money -= CupidPrice;
+            CupidPrice = 0;
+        }
+        else if (_spriteIndex == 4)
+        {
+            Debug.Log("Look is already in use");
+        }
+    }
+    public void DemonBuy()
+    {
+        if (_spriteIndex != 5 && _currency >= DemonPrice)
+        {
+            _spriteIndex = 5;
+            _currency -= DemonPrice;
+            DemonPrice = 0;
+        }
+        else if (_spriteIndex == 5)
+        {
+            Debug.Log("Look is already in use");
+        }
+    }
+    public void SamuraiBuy()
+    {
+        if (_spriteIndex != 6 && _money >= SamuraiPrice)
+        {
+            _spriteIndex = 6;
+            _money -= SamuraiPrice;
+            SamuraiPrice = 0;
+        }
+        else if (_spriteIndex == 6)
+        {
+            Debug.Log("Look is already in use");
+        }
+    }
+    public void NinjaBuy()
+    {
+        if (_spriteIndex != 7 && _currency >= NinjaPrice)
+        {
+            _spriteIndex = 7;
+            _currency -= NinjaPrice;
+            NinjaPrice = 0;
+        }
+        else if (_spriteIndex == 7)
         {
             Debug.Log("Look is already in use");
         }

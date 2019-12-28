@@ -24,11 +24,9 @@ public class PlayGamesScript : MonoBehaviour
         PlayGamesPlatform.InitializeInstance(config);
         PlayGamesPlatform.Activate();
 
-        if (!Social.localUser.authenticated)
-            Social.localUser.Authenticate((bool success) => {});
+        SignIn();
     }
 
-    //SignIn function currently not in use
     void SignIn()
     {
         Social.localUser.Authenticate(success => {});

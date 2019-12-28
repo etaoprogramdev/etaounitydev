@@ -802,15 +802,15 @@ MonoBehaviour:
   pauseMenu: {fileID: 1570235204}
   GUI: {fileID: 635569072}
   LooksMenu: {fileID: 1907373244}
-  GuideMenu: {fileID: 0}
+  GuideMenu: {fileID: 1899138694}
   UpgradeMenu: {fileID: 1833366333}
   UpgradeButton: {fileID: 1429907885}
   LooksButton: {fileID: 1899138696}
-  GuideButton: {fileID: 0}
+  GuideButton: {fileID: 1899138696}
   highScoreTxt: {fileID: 1907373246}
   floorMaterial:
   - {fileID: 1879011332}
-  infoMenu: {fileID: 0}
+  infoMenu: {fileID: 1899138694}
   thrustCost: 10
   boostCost: 10
   toughCost: 10
@@ -820,6 +820,12 @@ MonoBehaviour:
   toughSlider: {fileID: 443539369}
   bounceSlider: {fileID: 740949558}
   HulkTag: {fileID: 1899138694}
+  WizardTag: {fileID: 1899138694}
+  BusinessTag: {fileID: 1899138694}
+  CupidTag: {fileID: 1899138694}
+  DemonTag: {fileID: 1899138694}
+  SamuraiTag: {fileID: 1899138694}
+  NinjaTag: {fileID: 1899138694}
 --- !u!4 &142289574
 Transform:
   m_ObjectHideFlags: 0
