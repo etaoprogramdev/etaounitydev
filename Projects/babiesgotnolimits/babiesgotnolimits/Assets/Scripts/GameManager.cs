@@ -8,11 +8,11 @@ using UnityEngine.SceneManagement;
 using TMPro;
 using UnityEngine.Advertisements;
 using UnityEngine.Analytics;
-using UnityEngine.Purchasing;
+//using UnityEngine.Purchasing;
 
 public class GameManager : MonoBehaviour
 {
-    public Purchaser purchaseManager;
+    //public Purchaser purchaseManager;
     //Ads
     private string storeID = "3408991";
     #region Skin System
@@ -32,6 +32,7 @@ public class GameManager : MonoBehaviour
     public TextMeshProUGUI Score;
     public AudioSource menuClick;
     public AudioSource coinSound;
+    public AudioSource opalSound;
     public AudioSource upgradeSound;
     public TextMeshProUGUI Money;
     public TextMeshProUGUI Currency;
@@ -119,7 +120,6 @@ public class GameManager : MonoBehaviour
         if (BabyController.scoreValue > _highScore)
         {
             _highScore = Mathf.RoundToInt(BabyController.scoreValue);
-            PlayGamesScript.AddScoreToLeaderBoard(GPGSIds.leaderboard_high_score, _highScore);
         }
 
         #region Hide Tags
@@ -227,12 +227,14 @@ public class GameManager : MonoBehaviour
             case ShowResult.Finished:
                 Debug.Log("The ad was successfully shown.");
                 _currency += 3;
+                opalSound.Play();
                 break;
             case ShowResult.Skipped:
                 Debug.Log("The ad was skipped before reaching the end.");
                 break;
             case ShowResult.Failed:
                 Debug.LogError("The ad failed to be shown.");
+                AdManager.noAds = true;
                 break;
         }
     }
@@ -306,51 +308,51 @@ public class GameManager : MonoBehaviour
         return save;
     }
     #endregion
-    #region In Game Purchases 
-    public void AddMoney2000()
-    {
-        if (_currency >= 10)
-        {
-            _money += 2000;
-            _currency -= 10;
-            coinSound.Play();
-        }
-    }
-    public void AddMoney10000()
-    {
-        if (_currency >= 100)
-        {
-            _money += 10000;
-            _currency -= 100;
-            coinSound.Play();
-        }
-    }
-    public void AddMoney50000()
-    {
-        if (_currency >= 500)
-        {
-            _money += 50000;
-            _currency -= 500;
-            coinSound.Play();
-        }
-    }
-    public void Buy50Opal()
-    {
-        purchaseManager.Buy50Opal();
-    }
-    public void Buy100Opal()
-    {
-        purchaseManager.Buy100Opal();
-    }
-    public void Buy500Opal()
-    {
-        purchaseManager.Buy500Opal();
-    }
-    public void Buy1000Opal()
-    {
-        purchaseManager.Buy1000Opal();
-    }
-    #endregion
+    //#region In Game Purchases 
+    //public void AddMoney2000()
+    //{
+    //    if (_currency >= 10)
+    //    {
+    //        _money += 2000;
+    //        _currency -= 10;
+    //        coinSound.Play();
+    //    }
+    //}
+    //public void AddMoney10000()
+    //{
+    //    if (_currency >= 100)
+    //    {
+    //        _money += 10000;
+    //        _currency -= 100;
+    //        coinSound.Play();
+    //    }
+    //}
+    //public void AddMoney50000()
+    //{
+    //    if (_currency >= 500)
+    //    {
+    //        _money += 50000;
+    //        _currency -= 500;
+    //        coinSound.Play();
+    //    }
+    //}
+    //public void Buy50Opal()
+    //{
+    //    purchaseManager.Buy50Opal();
+    //}
+    //public void Buy100Opal()
+    //{
+    //    purchaseManager.Buy100Opal();
+    //}
+    //public void Buy500Opal()
+    //{
+    //    purchaseManager.Buy500Opal();
+    //}
+    //public void Buy1000Opal()
+    //{
+    //    purchaseManager.Buy1000Opal();
+    //}
+    //#endregion
     #region Button functions
     public void PlayClick()
     {
@@ -383,6 +385,7 @@ public class GameManager : MonoBehaviour
     public void OpenLeaderBoard()
     {
         PlayGamesScript.ShowLeaderBoard();
+        PlayGamesScript.AddScoreToLeaderBoard(GPGSIds.leaderboard_high_score, _highScore);
     }
     public void AddBoost()
     {
@@ -439,6 +442,7 @@ public class GameManager : MonoBehaviour
         _money = 0;
         _currency = 0;
         _bounce = 1.0f;
+        _highScore = 0;
         thrustCost = 20;
         boostCost = 100;
         toughCost = 100;

@@ -1,0 +1,64 @@
+{ "skeleton": { "images": "A:/Users/Etao/Documents/GitHub/etaounitydev/Projects/alvisneverendingadventure/CharacterSpriteLayers/images/" },
+"bones": [
+	{ "name": "root" }
+],
+"slots": [
+	{ "name": "RightLeg", "bone": "root", "attachment": "RightLeg" },
+	{ "name": "RigthFoot", "bone": "root", "attachment": "RigthFoot" },
+	{ "name": "LeftLeg", "bone": "root", "attachment": "LeftLeg" },
+	{ "name": "LeftFoot", "bone": "root", "attachment": "LeftFoot" },
+	{ "name": "RightArm", "bone": "root", "attachment": "RightArm" },
+	{ "name": "RightHand", "bone": "root", "attachment": "RightHand" },
+	{ "name": "LeftArm", "bone": "root", "attachment": "LeftArm" },
+	{ "name": "LeftHand", "bone": "root", "attachment": "LeftHand" },
+	{ "name": "Pants", "bone": "root", "attachment": "Pants" },
+	{ "name": "Body", "bone": "root", "attachment": "Body" },
+	{ "name": "Head", "bone": "root", "attachment": "Head" },
+	{ "name": "RigthEye", "bone": "root", "attachment": "RigthEye" },
+	{ "name": "LeftEye", "bone": "root", "attachment": "LeftEye" }
+],
+"skins": {
+	"default": {
+		"RightLeg": {
+			"RightLeg": { "x": 1414.5, "y": -1777, "width": 67, "height": 116 }
+		},
+		"RigthFoot": {
+			"RigthFoot": { "x": 1425.5, "y": -1915.5, "width": 51, "height": 213 }
+		},
+		"LeftLeg": {
+			"LeftLeg": { "x": 1118, "y": -1787.5, "width": 56, "height": 123 }
+		},
+		"LeftFoot": {
+			"LeftFoot": { "x": 1107, "y": -1910.5, "width": 66, "height": 223 }
+		},
+		"RightArm": {
+			"RightArm": { "x": 1551, "y": -1093, "width": 350, "height": 258 }
+		},
+		"RightHand": {
+			"RightHand": { "x": 1757.5, "y": -1270, "width": 153, "height": 192 }
+		},
+		"LeftArm": {
+			"LeftArm": { "x": 1016, "y": -1091.5, "width": 482, "height": 313 }
+		},
+		"LeftHand": {
+			"LeftHand": { "x": 741, "y": -1297, "width": 148, "height": 188 }
+		},
+		"Pants": {
+			"Pants": { "x": 1286.5, "y": -1659.5, "width": 517, "height": 181 }
+		},
+		"Body": {
+			"Body": { "x": 1269, "y": -1230.5, "width": 550, "height": 719 }
+		},
+		"Head": {
+			"Head": { "x": 1215.5, "y": -705.5, "width": 483, "height": 415 }
+		},
+		"RigthEye": {
+			"RigthEye": { "x": 1331, "y": -698, "width": 70, "height": 70 }
+		},
+		"LeftEye": {
+			"LeftEye": { "x": 1119, "y": -700, "width": 70, "height": 70 }
+		}
+	}
+},
+"animations": { "animation": {} }
+}
